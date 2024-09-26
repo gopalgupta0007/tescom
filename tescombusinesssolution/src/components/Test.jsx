@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import bharatbank_removebg_preview from "../image/ourImages/bharatbank-removebg-preview.png"
+// import bharatbank_removebg_preview from "../image/"
 import bluedart_removebg_preview from "../image/ourImages/bluedart-removebg-preview.png"
 import camlin_removebg_preview from "../image/ourImages/camlin-removebg-preview.png"
 import ecom_removebg_preview from "../image/ourImages/ecom-removebg-preview.png"
@@ -48,26 +48,7 @@ function Test() {
   };
   return (
     <div className="slider-container" style={{ paddingTop: '100px', scale: '0.8' }}>
-      <Slider {...settings} style={{display:'flex', justifyContent:'center', alignItem:'center', border:'2px solid black'}}>
-        <div class="slide"><img src={bharatbank_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={bluedart_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={camlin_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={ecom_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={fis_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={fortis_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={hsbc_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={inframarket_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={kec_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={lnt_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={oberoi_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={polycab_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={schindler_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={tatacapital_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={titan_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={trnet_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={veenaworld_removebg_preview} className="imgTag" alt="logo" /></div>
-        <div class="slide"><img src={yusen_removebg_preview} className="imgTag" alt="logo" /></div>
-      </Slider>
+      <img src={schindler_removebg_preview} alt="" />
     </div>
   );
 }

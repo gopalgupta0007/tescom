@@ -4,7 +4,7 @@ import internshalaLogo from '../image/internshalaLogo.png'
 
 export default function Footer() {
     return (
-        <MDBFooter bgColor='light' className='text-center text-lg-start text-muted' style={{ position: 'relative', bottom: 0, borderTop:'2px solid #ccc' }}>
+        <MDBFooter bgColor='light' className='text-center text-lg-start text-muted' style={{ position: 'relative', bottom: 0, borderTop: '2px solid #ccc' }}>
             <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
                 <div className='me-5 d-none d-lg-block'>
                     <span className='textWhiteEnter'>Get connected with us on social networks:</span>
@@ -21,10 +21,13 @@ export default function Footer() {
                         <MDBIcon fab id="instagram-icon" icon="instagram" />
                     </a>
                     <a href='https://internshala.com/company/tescom-business-solutions-1714366894/' target='_blank' className='me-4 text-reset'>
-                        <img src={internshalaLogo} id="internshala" alt="internshala logo" style={{borderRadius:'2px'}} />
+                        <img src={internshalaLogo} id="internshala" alt="internshala logo" style={{ borderRadius: '2px' }} />
                     </a>
                     <a href='https://www.linkedin.com/company/tescomglobal/?originalSubdomain=in' target='_blank' className='me-4 text-reset'>
                         <MDBIcon fab id="linkedin-icon" icon="linkedin" />
+                    </a>    
+                    <a href='https://api.whatsapp.com/send?phone=917357482947' target='_blank' className='me-4 text-reset'>
+                        <i class="fa-brands fa-whatsapp" id="whatsapp-icon" icon="whatsapp"></i>
                     </a>
                 </div>
             </section>
@@ -45,18 +48,18 @@ export default function Footer() {
                         <MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
                             <h6 className='text-uppercase fw-bold mb-4' >Useful links</h6>
                             <p>
-                                <a href='http://localhost:3001/contactus' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
+                                <a href='/contactus' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
                                     Contact US
                                 </a>
                             </p>
                             <p>
-                                <a href='http://localhost:3001/career' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
+                                <a href='/career' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
                                     Career
                                 </a>
                             </p>
                             <p>
-                                <a href='#!' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
-                                    Help
+                                <a href='/about' style={{ textDecoration: 'none' }} className='text-reset textWhiteEnter'>
+                                    About
                                 </a>
                             </p>
                         </MDBCol>

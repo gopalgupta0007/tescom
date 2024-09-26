@@ -11,8 +11,9 @@ import axios from 'axios';
 if (atob(localStorage.getItem('auth'))!="Yes" && atob(localStorage.getItem('auth')) != "No") {
   localStorage.setItem("auth", btoa("No"))
 }
+// localStorage.setItem("auth", btoa("No"))
 
-axios.defaults.baseURL=process.env.REACT_APP_BACKENDURL;
+axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -8,6 +8,10 @@ import naas from '../image/serviceImg/naas.png'
 import networkbooster from '../image/serviceImg/networkbooster.png'
 import { downloadPdf, obfuscateEmail } from './Methods/Method'
 import axios from 'axios'
+// import PhoneInput from 'react-phone-input-2'
+// import 'react-phone-input-2/lib/style.css'
+
+
 // import otpGenerator from 'otp-generator'
 // const otpGenerator = require('otp-generator')
 // import { json } from 'react-router-dom'
@@ -15,47 +19,55 @@ import axios from 'axios'
 // import { useNavigate } from 'react-router-dom'
 // console.log();
 var newOTP;
+let usersData = []
 
 const Servicesddl = () => {
   // const [auth, setAuth] = useState((atob(localStorage.getItem("auth")) == "Yes") ? false : true);
   const [auth, setAuth] = useState(false);
+  // const [clickedBtn, setClickedBtn] = useState(false);
+  // const
+  // const [user, setUser] = useState(null);
+  const [enterdOTP, setEnteredOTP] = useState(null);
 
-  useEffect(()=>{
-    if (atob(localStorage.getItem("auth"))=="Yes") {
+  const [userdata, setUserData] = useState({
+    phone: null,
+    email: '',
+    otp: null
+  });
+
+  useEffect(() => {
+    if (atob(localStorage.getItem("auth")) == "Yes") {
       setAuth(false)
+      console.log(userdata);
     } else {
-      if (atob(localStorage.getItem("auth"))=="No") {
+      if (atob(localStorage.getItem("auth")) == "No") {
         setAuth(true)
       } else {
         setAuth(true)
       }
     }
-  },[])
+  }, [])
 
-  const [enterdOTP, setEnteredOTP] = useState({
-    enterdMailOTP: 0,
-    enterdPhonenoOTP: 0
-  });
-  const [mailData, setMailData] = useState({
-    email: '',
-    otp: 0
-  });
-  const [phonenoData, setPhonenoData] = useState({
-    phone: 0,
-    otp: 0
-  });
-  // const navigate = useNavigate()
+  // const [enterdOTP, setEnteredOTP] = useState({
+  //   enterdMailOTP: 0,
+  //   enterdPhonenoOTP: 0
+  // });
+  // const [phonenoData, setPhonenoData] = useState({
+  //   phone: 0,
+  //   otp: 0
+  // });
+
   function closeAuth() {
     setAuth(false)
   }
 
-  function setOTP(setMailData) {
-    const x = setMailData
-    x((prevData) => ({
-      ...prevData,
-      otp: Math.floor(Math.random() * 10000)
-    }));
-  }
+  // function setOTP(setMailData) {
+  //   const x = setMailData
+  //   x((prevData) => ({
+  //     ...prevData,
+  //     otp: Math.floor(Math.random() * 10000)
+  //   }));
+  // }
 
 
 
@@ -67,77 +79,99 @@ const Servicesddl = () => {
   }
 
   // send OTP on Phone Number
-  const sendOTPonPhoneno = (e) => {
-    console.log("send otp functions started");
-    console.log(phonenoData.phone);
-    e.preventDefault();
-    try {
-      var { phone, otp } = phonenoData;
-      newOTP = Math.floor(Math.random() * 10000)
-      axios.post('/phoneno', { phone, otp: newOTP }) // Adjust URL to match your backend endpoint
-        .then(res => {
-          console.log(res.data); console.log("otp sended")
-          // document.getElementsByClassName('hide')[0].style.display = "inline-block"; 
-          // document.getElementsByClassName('hide')[1].style.display = "inline-block" 
+  // const sendOTPonPhoneno = async (e) => {
+  //   console.log("send otp functions started");
+  //   console.log(phonenoData.phone);
+  //   e.preventDefault();
+  //   try {
+  //     // var { phone, otp } = phonenoData;
+  //     newOTP = Math.floor(Math.random() * 10000)
+  //     const recapture = new RecaptchaVerifier(firebaseAuth, "recaptcha", {})
+  //     const confirmation = await signInWithPhoneNumber(firebaseAuth, "+91" + String(phonenoData.phone), recapture)
+  //     setUser(confirmation);
+  //     // axios.post('/phoneno', { phone, otp: newOTP }) // Adjust URL to match your backend endpoint
+  //     //   .then(res => {
+  //     //     console.log(res.data); console.log("otp sended")
+  //     //     // document.getElementsByClassName('hide')[0].style.display = "inline-block"; 
+  //     //     // document.getElementsByClassName('hide')[1].style.display = "inline-block" 
 
-          // Select all elements with the 'hide' class
-          const elements = document.querySelectorAll('.phone');
+  //     //     // Select all elements with the 'hide' class
+  //     //     const elements = document.querySelectorAll('.phone');
 
-          // Loop through each element and remove the 'hide' class
-          elements.forEach(element => {
-            element.classList.remove('hide');
-          });
-        })
-        .catch(err => console.log(err))
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     //     // Loop through each element and remove the 'hide' class
+  //     //     elements.forEach(element => {
+  //     //       element.classList.remove('hide');
+  //     //     });
+  //     //   })
+  //     //   .catch(err => console.log(err))
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   //verify Phoneno OTP
-  const verifyPhonenoOTP = (e) => {
+  // const verifyPhonenoOTP = async (e) => {
+  //   try {
+  //     e.preventDefault()
+  //     newOTP = Math.floor(Math.random() * 10000)
+  //     user.confirm(newOTP)
+  //   } catch (error) {
 
-  }
+  //   }
+  // }
 
   // send OTP on mail
-  const sendOTPonEmail = (e) => {
+  const sendOTP = (e) => {
     e.preventDefault();
-    console.log(mailData.otp);
-    try {
-      var { email, otp } = mailData;
-      newOTP = Math.floor(Math.random() * 10000)
-      // setOTP(setMailData)
-      console.log("local setted otp => ", newOTP);
-      axios.post('/mail', { email, otp: newOTP }) // Adjust URL to match your backend endpoint
-        .then(response => {
-          if (response.status === 200 || response.status === 'OK') {
-            alert("OTP send successfully on " + obfuscateEmail(email) + " these mail.");
+    console.log(userdata.otp);
+    var { phone, email, otp } = userdata;
+    if (!phone == "" && !email == "") {
+      // getall users data
+      if ((usersData.includes(usersData.email) && usersData.includes(usersData.phone)) ) {
+        alert("these data email ID and phone number already used...")
+      } else {
+        try {
+          newOTP = Math.floor(Math.random() * 10000)
+          // setOTP(setMailData)
+          console.log("local setted otp => ", newOTP);
+          axios.post('/mail', { phone, email, otp: newOTP }) // Adjust URL to match your backend endpoint
+            .then(response => {
+              if (response.status === 200 || response.status === 'OK') {
+                // document.getElementsByClassName('hide')[0].classList.remove(); 
+                usersData.push({ email, phone })
+                alert("OTP send successfully on " + obfuscateEmail(email) + " these mail.");
+                localStorage.setItem("email", userdata.email)
+                localStorage.setItem("phone", userdata.phone)
+                // document.getElementsByClassName('hide')[0].classList.remove(); 
+                document.getElementsByClassName('hide')[0].style.display = "inline-block"
+                // Select all elements with the 'hide' class
+                // const elements = document.querySelectorAll('.mail');
 
-            // document.getElementsByClassName('hide')[0].style.display = "inline-block"; 
-            // document.getElementsByClassName('hide')[1].style.display = "inline-block" 
-
-            // Select all elements with the 'hide' class
-            const elements = document.querySelectorAll('.mail');
-
-            // Loop through each element and remove the 'hide' class
-            elements.forEach(element => {
-              element.classList.remove('hide');
-            });
-          }
-          else alert("mail not sended")
-        })
-        .catch(error => console.log(error))
-    } catch (err) {
-      console.log(err);
+                // // Loop through each element and remove the 'hide' class
+                // elements.forEach(element => {
+                //   element.classList.remove('hide');
+                // });
+              }
+              else alert("mail not sended")
+            })
+            .catch(error => console.log(error))
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } else {
+      alert("should be fill email and phone number both")
     }
   };
 
+
+  console.log(usersData);
   //verify Mail OTP
-  const verifyEmailOTP = e => {
+  const verifyOTP = e => {
     e.preventDefault()
-    console.log(`checking.....${enterdOTP.enterdMailOTP} == ${newOTP}`);
-    console.log(`checking.....${typeof (enterdOTP.enterdMailOTP)} == ${typeof (newOTP)}`);
-    if (Number(enterdOTP.enterdMailOTP) === newOTP) {
+    // console.log(`checking.....${enterdOTP.enterdMailOTP} == ${newOTP}`);
+    // console.log(`checking.....${typeof (enterdOTP.enterdMailOTP)} == ${typeof (newOTP)}`);
+    if (Number(enterdOTP) === newOTP) {
       alert("Email address verified...");
       downloadPdf();
       setAuth(false)
@@ -151,7 +185,7 @@ const Servicesddl = () => {
 
   // if email or phone number are verifyed then user can able to downlaod the pdf
   function onButtonClick(e) {
-    if (atob(localStorage.getItem("auth"))=='Yes') {
+    if (atob(localStorage.getItem("auth")) == 'Yes') {
       setAuth(false)
       // localStorage.setItem("auth", btoa("No"))
       // const authElement = document.getElementById("authenticationPopUp");
@@ -308,18 +342,31 @@ const Servicesddl = () => {
         <span className="close" onClick={closeAuth}>&times;</span>
         <div id='auth'>
           <form>
-            <center style={{ margin: '5% auto' }}>
-              <h1>Email</h1>
-              <input placeholder='Email' className='input' name='email' onChange={(e) => setData(e, setMailData)} type="email" id='email' />
-              <button className='verifybtn' onClick={(e) => sendOTPonEmail(e)}>Send</button><br />
+            {/* <center style={{ margin: '5% auto' }}>
+              <h1>Verifications</h1>
+              <input placeholder='Email' className='input' name='email' value={mailData.email} onChange={(e) => setData(e, setMailData)} type="email" id='email' />
+              <button className='verifybtn' onClick={(e) => sendOTP(e)}>Send</button><br />
               <input placeholder="Enter Code" className='input hide mail' id='otp-inp' onChange={(e) => setData(e, setEnteredOTP)} name='enterdMailOTP' type="number" />
-              <button className='verifybtn hide mail' id='btnVerifyEmail' onClick={e => verifyEmailOTP(e)}>verify</button><br /><br />
+              <button className='verifybtn hide mail' id='btnVerifyEmail' onClick={e => verifyEmailOTP(e)}>verify</button><br/>
 
-              <h1>Phone Number</h1>
               <input placeholder='Phone Number' className='input' type="number" name='phone' id='phoneno' onChange={(e) => setData(e, setPhonenoData)} />
               <button className='verifybtn' onClick={e => sendOTPonPhoneno(e)}>Send</button><br />
+              <div id="recaptcha"></div>
               <input placeholder="Enter Code" className='input hide phone' type="number" name='enterdPhonenoOTP' onChange={(e) => setData(e, setEnteredOTP)} />
-              <button className='verifybtn hide phone' id='btnVerifyPhoneno'>verify</button><br />
+              <button className='verifybtn hide phone' id='btnVerifyPhoneno' onClick={e=>verifyPhonenoOTP
+                (e)}>verify</butt
+                on><br />
+            </center> */}
+            <center style={{ margin: '5% auto' }}>
+              <h1>Verifications</h1>
+              <input placeholder='Email' className='input' style={{ margin: '5px', borderRadius:'10px', outline:'none', border:'none' }} name='email' value={userdata.email} onChange={(e) => setData(e, setUserData)} type="email" id='email' />
+              <input placeholder='Phone Number' className='input' style={{ margin: '5px' }} value={userdata.phone} type="number" name='phone' id='phoneno' onChange={(e) => setData(e, setUserData)} /><br />
+              <button className='verifybtn' onClick={(e) => sendOTP(e)} style={{ margin: '5px' }}>Send</button><br />
+              <div className='hide'>
+                <hr />
+                <input placeholder="Enter OTP" className='input mail' id='otp-inp' onChange={(e) => setEnteredOTP(e.target.value)} value={enterdOTP} name='otp' type="number" />
+                <button className='verifybtn mail' id='btnVerifyEmail' onClick={e => verifyOTP(e)}>verify</button>
+              </div>
             </center>
           </form>
         </div>

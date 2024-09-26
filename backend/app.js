@@ -84,7 +84,9 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 
 require('dotenv').config();
-var twilio = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+// var twilio = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const multer = require('multer');
+const fs = require('fs');
 
 
 const app = express();
@@ -107,8 +109,8 @@ app.get("/", (req, res) => res.send("server running port 5000"))
 
 // Endpoint to handle sending email
 app.post('/mail', (req, res) => {
-  var { email, otp } = req.body;
-  console.log(email, otp);
+  let { phone, email, otp } = req.body;
+  console.log(phone, email, otp);
   // Email options
   // mailTxt="OTP : "+otp;
   const mailOptions = {
@@ -128,6 +130,112 @@ app.post('/mail', (req, res) => {
     res.status(200).json({ message: 'Email sent successfully' });
   });
 });
+
+app.post('/contact', (req, res) => {
+  let { fname, lname, email, phone, msg } = req.body;
+  console.log(fname, lname, email, phone, msg);
+  // Email options
+  // mailTxt="OTP : "+otp;
+  const mailOptions = {
+    from: process.env.USER_ID,
+    to: email,//add support@tescom.in
+    subject: `TESCOM ContactUs Submission : ${!fname ? '' : fname} ${!lname ? '' : lname}`,
+    text: `\bName : ${!fname ? '' : fname} ${!lname ? '' : lname}\nEmail : ${!email ? '' : email}\nPhone No.: ${!phone ? '' : phone}\nMessage :\b ${!msg ? 'Not Entered any Message' : msg}`
+  };
+
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+      return res.status(500).json({ message: 'Failed to send email' });
+    }
+    console.log('Email sent:', info.response);
+    res.status(200).json({ message: 'Email sent successfully' });
+  });
+});
+
+const upload = multer({ dest: 'uploads/' });
+
+// Nodemailer transporter configuration
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // or your email service provider
+//   auth: {
+//     user: 'your-email@gmail.com',
+//     pass: 'your-email-password',
+//   },
+// });
+
+// POST route to handle file upload and send email
+app.post('/upload', upload.single('resume'), (req, res) => {
+  // const { name, phone, email, stream, msg } = req.body;
+  const { name, phone, email, stream, msg } = req.body;
+  const resumePath = req.file.path;
+  console.log("career => ", name, phone, email, stream, msg);
+
+  const mailOptions = {
+    from: process.env.USER_ID,
+    to: email,//add support@tescom.in OR hr@tescom.in
+    subject:`TESCOM Career Submission : ${!name ? '' : name}`,
+    // subject:`TESCOM Career Submission : `,
+    // text:'testing',
+    text:`\bName : ${!name ? '' : name}\nEmail : ${!email ? '' : email}\nPhone No.: ${!phone ? '' : phone}\nStream : ${!stream ? '' : stream}\nMessage :\b ${!msg ? 'Not Entered any Message' : msg}`,
+    attachments: [
+      {
+        filename: req.file.originalname,
+        path: resumePath,
+        contentType: 'application/pdf',
+      },
+    ],
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ', error);
+      return res.status(500).send('Error sending email');
+    }
+
+    // Remove uploaded file after email is sent
+    fs.unlink(resumePath, (err) => {
+      if (err) {
+        console.error('Error deleting file:', err);
+      }
+      console.log('Temporary file deleted');
+    });
+
+    console.log('Email sent: ' + info.response);
+    res.send('Resume uploaded and email sent successfully!');
+  });
+});
+
+
+
+
+
+
+
+
+// app.use(cors());
+
+// Multer config to store uploaded files temporarily in 'uploads' directory
+
+// Start the Express server
+// app.listen(3000, () => {
+//   console.log('Server is running on http://localhost:3000');
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.post('/phoneno', (req, res) => {
 //   const { phone, otp } = req.body;

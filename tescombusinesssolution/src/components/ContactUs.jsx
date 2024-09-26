@@ -1,7 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import whatsappLogo from '../image/whatsappimg.png'
+import axios from 'axios';
 
 const ContactUs = () => {
+
+  const [contactUs, setContactUs] = useState({
+    fname: '',
+    lname: '',
+    email: !localStorage.getItem("email") ? '' : localStorage.getItem("email"),
+    phone: !localStorage.getItem("phone") ? '' : localStorage.getItem("phone"),
+    msg: '',
+  });
+
+  const setContactUsData = (e, setUseState) => {
+    setUseState((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value
+    }));
+  }
+
+  const sendMsg = (e) => {
+    e.preventDefault();
+    try {
+      let {fname, lname, email, phone, msg} = contactUs;
+      axios.post('/contact', {fname, lname, email, phone, msg}) // Adjust URL to match your backend endpoint
+        .then(response => {
+          if (response.status === 200 || response.status === 'OK') {
+            alert('msg send successfull')
+
+            // clear enter data
+            setContactUs(prevData=>({...prevData, msg:''}))
+          } else alert("msg not sended")
+        })
+        .catch(error => console.log(error))
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  console.log(contactUs);
+
   useEffect(() => {
     const initMap = () => {
       const mapOptions = {
@@ -40,13 +78,13 @@ const ContactUs = () => {
   }, []);
 
   return (
-    <div className="container" style={{paddingTop:'100px'}} >
+    <div className="container" style={{ paddingTop: '100px' }} >
       <div className="innerwrap">
         <section className="section1 clearfix">
           <div className="textcenter">
             {/* <span className="shtext">Contact Us</span> */}
             {/* <span className="seperator"></span> */}
-            <h1 id='tescomTxtStyle' style={{fontWeight:'bolder'}}>Contact Us</h1>
+            <h1 id='tescomTxtStyle' style={{ fontWeight: 'bolder' }}>Contact Us</h1>
           </div>
         </section>
 
@@ -70,19 +108,19 @@ const ContactUs = () => {
               <h3 className="sec2frmtitle">Want to Know More?? Drop Us a Mail</h3>
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="clearfix">
-                  <input className="col2 first" type="text" placeholder="FirstName" />
-                  <input className="col2 last" type="text" placeholder="LastName" />
+                  <input className="col2 first" type="text" name='fname' style={{ fontWeight: 'bolder' }} value={contactUs.fname} onChange={e => setContactUsData(e, setContactUs)} placeholder="FirstName" />
+                  <input className="col2 last" type="text" name='lname' style={{ fontWeight: 'bolder' }} value={contactUs.lname} onChange={e => setContactUsData(e, setContactUs)} placeholder="LastName" />
                 </div>
                 <div className="clearfix">
-                  <input className="col2 first" type="email" placeholder="Email" />
-                  <input className="col2 last" type="text" placeholder="Contact Number" />
+                  <input className="col2 first" type="email" name='email' value={contactUs.email} onChange={e => setContactUsData(e, setContactUs)} style={{ fontWeight: 'bolder' }} placeholder="Email" />
+                  <input className="col2 last" type="text" name='phone' value={contactUs.phone} onChange={e => setContactUsData(e, setContactUs)} style={{ fontWeight: 'bolder' }} placeholder="Contact Number" />
                 </div>
                 <div className="clearfix">
-                  <textarea name="textarea" cols="30" rows="7" placeholder="Your message here..."></textarea>
+                  <textarea name="msg" cols="30" rows="7" style={{ fontWeight: 'bolder' }} value={contactUs.msg} onChange={e => setContactUsData(e, setContactUs)} placeholder="Your message here..."></textarea>
                 </div>
-                <div className="clearfix" style={{display:'flex', alignItems:'center'}}>
-                  <input type="submit" style={{borderRadius:'10px'}}value="Send" />
-                  <button id="submitbtn" style={{height:'60px',paddingTop:'7px',margin:'10px',borderRadius:'10px', padding:'5px',fontWeight:500, outline:'none', border:'none'}}>Contact on Whatsapp<img src={whatsappLogo} alt="whatsappLogo" style={{width:'50px'}}/></button>
+                <div className="clearfix" style={{ display: 'flex', alignItems: 'center' }}>
+                  <input type="submit" style={{ borderRadius: '10px' }} value="Send" onClick={e=>sendMsg(e)} />
+                  <button id="submitbtn" onClick={()=>window.location.href = "https://api.whatsapp.com/send?phone=917357482947"} target="_blank" style={{ height: '60px', paddingTop: '7px', margin: '10px', borderRadius: '10px', padding: '5px', fontWeight: 500, outline: 'none', border: 'none' }}>Contact on Whatsapp<img src={whatsappLogo} alt="whatsappLogo" style={{ width: '50px' }} /></button>
                 </div>
               </form>
             </div>
