@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import whatsappLogo from '../image/whatsappimg.png'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const ContactUs = () => {
 
@@ -12,6 +13,12 @@ const ContactUs = () => {
     msg: '',
   });
 
+  useEffect(() => {
+    if (window.scrollY !== 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top with smooth behavior
+    }
+  }, []);
+
   const setContactUsData = (e, setUseState) => {
     setUseState((prevData) => ({
       ...prevData,
@@ -22,19 +29,19 @@ const ContactUs = () => {
   const sendMsg = (e) => {
     e.preventDefault();
     try {
-      let {fname, lname, email, phone, msg} = contactUs;
-      axios.post('/contact', {fname, lname, email, phone, msg}) // Adjust URL to match your backend endpoint
+      let { fname, lname, email, phone, msg } = contactUs;
+      axios.post('/contact', { fname, lname, email, phone, msg }) // Adjust URL to match your backend endpoint
         .then(response => {
           if (response.status === 200 || response.status === 'OK') {
-            alert('msg send successfull')
+            toast.success('msg send successfull')
 
             // clear enter data
-            setContactUs(prevData=>({...prevData, msg:''}))
-          } else alert("msg not sended")
+            setContactUs(prevData => ({ ...prevData, msg: '' }))
+          } else toast.error("msg not sended")
         })
-        .catch(error => console.log(error))
+        .catch(error => toast.error(error))
     } catch (err) {
-      console.log(err);
+      toast.error(err);
     }
   }
 
@@ -84,7 +91,7 @@ const ContactUs = () => {
           <div className="textcenter">
             {/* <span className="shtext">Contact Us</span> */}
             {/* <span className="seperator"></span> */}
-            <h1 id='tescomTxtStyle' style={{ fontWeight: 'bolder' }}>Contact Us</h1>
+            <h1 id='tescomTxtStyle' style={{ fontWeight: 'bolder', fontSize: '50px' }}>Contact Us</h1>
           </div>
         </section>
 
@@ -119,8 +126,8 @@ const ContactUs = () => {
                   <textarea name="msg" cols="30" rows="7" style={{ fontWeight: 'bolder' }} value={contactUs.msg} onChange={e => setContactUsData(e, setContactUs)} placeholder="Your message here..."></textarea>
                 </div>
                 <div className="clearfix" style={{ display: 'flex', alignItems: 'center' }}>
-                  <input type="submit" style={{ borderRadius: '10px' }} value="Send" onClick={e=>sendMsg(e)} />
-                  <button id="submitbtn" onClick={()=>window.location.href = "https://api.whatsapp.com/send?phone=917357482947"} target="_blank" style={{ height: '60px', paddingTop: '7px', margin: '10px', borderRadius: '10px', padding: '5px', fontWeight: 500, outline: 'none', border: 'none' }}>Contact on Whatsapp<img src={whatsappLogo} alt="whatsappLogo" style={{ width: '50px' }} /></button>
+                  <input type="submit" style={{ borderRadius: '10px' }} value="Send" onClick={e => sendMsg(e)} />
+                  <button id="submitbtn" onClick={() => window.location.href = "https://api.whatsapp.com/send?phone=917357482947"} target="_blank" style={{ height: '60px', paddingTop: '7px', margin: '10px', borderRadius: '10px', padding: '5px', fontWeight: 500, outline: 'none', border: 'none' }}>Contact on Whatsapp<img src={whatsappLogo} alt="whatsappLogo" style={{ width: '50px' }} /></button>
                 </div>
               </form>
             </div>

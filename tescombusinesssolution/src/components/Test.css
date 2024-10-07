@@ -1,50 +1,35 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.slider {
+.app {
   display: flex;
-  overflow: hidden;
-  background-repeat: repeat-x;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  height: 100vh;
+  transition: filter 0.3s ease;
+  z-index: 1;
 }
 
-.slide {
-  min-width: 16.66%; /* 100% / 6 */
-  padding: 10px;
-  transition: transform 1s ease-in-out;
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
 }
 
-.slide img {
-  width: 100%;
-  border-radius: 8px;
+.popup-div {
+  width: 200px;
+  height: 200px;
+  background-color: red;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100; /* Ensure it's above other elements */
 }
 
-@media (max-width: 768px) {
-  .slide {
-      min-width: 25%; /* 100% / 4 */
-  }
-}
+.blur {
+  position: relative;
+  z-index: -1;
+  filter: blur(5px); /* Apply blur to the body */
 
-@media (max-width: 520px) {
-  .slide {
-      min-width: 33.33%; /* 100% / 3 */
-  }
 }
