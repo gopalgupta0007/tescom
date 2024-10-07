@@ -88,11 +88,14 @@ require('dotenv').config();
 const multer = require('multer');
 const fs = require('fs');
 
+const Connection = require('../backend/src/db/connect');
+const Users = require('./src/models/User');
 
 const app = express();
 const PORT = 5000;
 
 // Middleware to parse JSON and enable CORS
+Connection()
 app.use(express.json());
 app.use(cors());
 
@@ -108,13 +111,14 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req, res) => res.send("server running port 5000"))
 
 // Endpoint to handle sending email
+// services
 app.post('/mail', (req, res) => {
   let { phone, email, otp } = req.body;
   console.log(phone, email, otp);
   // Email options
   // mailTxt="OTP : "+otp;
   const mailOptions = {
-    from: process.env.USER_ID,
+    from: process.env.USER_ID,//tescombusinessolution@gmail.com
     to: email,
     subject: "OTP From Tescom Business Solution",
     text: "OTP : " + String(otp)
@@ -128,9 +132,11 @@ app.post('/mail', (req, res) => {
     }
     console.log('Email sent:', info.response);
     res.status(200).json({ message: 'Email sent successfully' });
+    // save mail and phone in the mongodb database
   });
 });
 
+//Contact
 app.post('/contact', (req, res) => {
   let { fname, lname, email, phone, msg } = req.body;
   console.log(fname, lname, email, phone, msg);
@@ -156,16 +162,9 @@ app.post('/contact', (req, res) => {
 
 const upload = multer({ dest: 'uploads/' });
 
-// Nodemailer transporter configuration
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail', // or your email service provider
-//   auth: {
-//     user: 'your-email@gmail.com',
-//     pass: 'your-email-password',
-//   },
-// });
 
 // POST route to handle file upload and send email
+//career
 app.post('/upload', upload.single('resume'), (req, res) => {
   // const { name, phone, email, stream, msg } = req.body;
   const { name, phone, email, stream, msg } = req.body;
@@ -174,11 +173,11 @@ app.post('/upload', upload.single('resume'), (req, res) => {
 
   const mailOptions = {
     from: process.env.USER_ID,
-    to: email,//add support@tescom.in OR hr@tescom.in
-    subject:`TESCOM Career Submission : ${!name ? '' : name}`,
+    to: email,//add hr@tescom.in
+    subject: `TESCOM Career Submission : ${!name ? '' : name}`,
     // subject:`TESCOM Career Submission : `,
     // text:'testing',
-    text:`\bName : ${!name ? '' : name}\nEmail : ${!email ? '' : email}\nPhone No.: ${!phone ? '' : phone}\nStream : ${!stream ? '' : stream}\nMessage :\b ${!msg ? 'Not Entered any Message' : msg}`,
+    text: `\bName : ${!name ? '' : name}\nEmail : ${!email ? '' : email}\nPhone No.: ${!phone ? '' : phone}\nStream : ${!stream ? '' : stream}\nMessage :\b ${!msg ? 'Not Entered any Message' : msg}`,
     attachments: [
       {
         filename: req.file.originalname,
@@ -208,6 +207,38 @@ app.post('/upload', upload.single('resume'), (req, res) => {
 });
 
 
+app.get('/getalldata', async(req, res) => {
+  let users;
+  try {
+    users = await Users.find();
+    if (!users) {
+      return res.status(500).json({ massage: "unexpected error occured!" });
+    }
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+  return res.status(200).json({ users });
+})
+
+app.post('/savedata', async (req, res) => {
+  try {
+    const { email, phoneno, date } = req.body;    // take data form frontend body
+    console.log("savedata => ", email, phoneno, date);
+    const userData = await Users.findOne({ email: email });
+    if (!phoneno || !email || !date) {
+      return res.status(500).json({ massage: "enter all correct data" });
+    } else if (userData) {
+      return res.status(422).json({ massage: "invalid input data, enter correct data" });
+    } else {
+      const userExist = new Users({ email, phoneno, date });
+      // before saving the .pre method are goings to call first.
+      await userExist.save();
+    }
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+  return res.status(200).json({ massage: "signup successfull" })
+})
 
 
 
