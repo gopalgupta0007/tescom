@@ -5,10 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
+import { Zoom, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 <script src="https://smtpjs.com/v3/smtp.js">
 </script>
 
-if (atob(localStorage.getItem('auth'))!="Yes" && atob(localStorage.getItem('auth')) != "No") {
+
+console.log(window.document.body.offsetWidth);
+if (atob(localStorage.getItem('auth')) != "Yes" && atob(localStorage.getItem('auth')) != "No") {
   localStorage.setItem("auth", btoa("No"))
 }
 // localStorage.setItem("auth", btoa("No"))
@@ -20,6 +27,19 @@ root.render(
   <Router>
     <StrictMode>
       <App />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Zoom}
+      />
     </StrictMode>
   </Router>
 );

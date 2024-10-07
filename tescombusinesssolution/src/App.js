@@ -7,6 +7,7 @@ import Career from './components/Career';
 import Header from './components/Header';
 import Test from './components/Test';
 import Footer from './components/Footer';
+import OurTeam from './components/OurTeam';
 // import Header from './components/Header';
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
         <Route exact path="/about" element={<About />} />
         <Route exact path="/contactus" element={<ContactUs />} />
         <Route exact path="/career" element={<Career />} />
-        <Route exact path="/test" element={<Test />} />
+        <Route exact path="/test" element={<OurTeam />} />
       </Routes>      
       <Footer />
     </>
